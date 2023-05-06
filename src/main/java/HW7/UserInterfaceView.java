@@ -2,12 +2,13 @@ package HW7;
 
 import javax.sound.midi.ControllerEventListener;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class UserInterfaceView {
     private Controller controller = new Controller();
 
-    public void runInterface() throws IOException {
+    public void runInterface() throws IOException, SQLException, ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -19,7 +20,7 @@ public class UserInterfaceView {
                 System.out.println("Ошибка, введите город...");
                 continue;
             } else {
-                System.out.println("Введите \"1\" для прогноза погода на 1 день, \"5\" для прогноза погоды 5 дней, \"0\" выход: ");
+                System.out.println("Введите \"1\" для прогноза погода на 1 день, \"5\" для прогноза погоды 5 дней, \"2\" для печати DB, \"0\" выход: ");
 
                 String command = scanner.nextLine();
 
@@ -30,6 +31,15 @@ public class UserInterfaceView {
                         try {
                             controller.getWeather("1", city);
                         } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    case "2":
+                        try {
+                            controller.printDataFromDB();
+                        } catch (ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
                         break;
